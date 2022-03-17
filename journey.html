@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Journey | Aravind Kannan</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+
+      @layer components {
+        .navbar-item {
+          @apply p-2 rounded-xl hover:bg-gradient-to-r hover:from-red-600 hover:to-purple-600 hover:text-white ease-in-out duration-500;
+        }
+        .navbar-item--selected {
+          @apply p-2 rounded-xl bg-gradient-to-r from-red-600 to-purple-600 text-white ease-in-out duration-500;
+        }
+        .table-item {
+          @apply border border-white h-full;
+        }
+        td {
+          @apply my-4;
+        }
+      }
+    </style>
+  </head>
+  <body class="h-screen flex flex-col bg-black text-white">
+    <header>
+      <nav
+        class="bg-gradient-to-r from-red-600 to-purple-600 bg-clip-text text-transparent flex flex-row justify-between p-3 font-semibold border-1 border-white"
+      >
+        <h1 class="m-2 text-3xl">Aravind Kannan</h1>
+        <ul class="flex flex-row gap-4 self-center">
+          <li class="navbar-item">
+            <a href="index.html" target="_blank">Personal Information</a>
+          </li>
+          <li class="navbar-item--selected">
+            <a href="journey.html" target="_blank">Journey</a>
+          </li>
+          <li class="navbar-item">
+            <a href="area.html" target="_blank">Area of interest</a>
+          </li>
+          <li class="navbar-item">
+            <a href="academic.html" target="_blank">
+              Academic proficieny details
+            </a>
+          </li>
+          <li class="navbar-item">
+            <a href="events.html" target="_blank">Events organized</a>
+          </li>
+          <li class="navbar-item">
+            <a href="feedback.html" target="_blank">Feedback</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main class="flex-1">
+      <section>
+        <h2 class="text-center text-6xl font-bold">Journey</h2>
+        <article class="mt-4 mx-48">
+          <h3 class="text-xl text-center mt-5">
+            TLDR; Indian kid in an Engineering College Dreaming BIG
+          </h3>
+          <p class="my-3">
+            If you're hoping for a gloomy and happy story, I must warn you!
+            Better not continue, you might get hurt! It was all in place until
+            grade X public exams were about to begin. I felt satisified with my
+            preparation and did my exams well enough to earn a 10 pointer. I was
+            cloud nine, when my results were out! I was a pretty peaceful phase
+            in my life. Little did I know that it was the silence before the
+            Tsunami.
+          </p>
+          <img
+            src="assets/ssn.png"
+            title="Sri Sivasubramaniya Nadar College of Engineering"
+            alt="SSN College Campus Picture"
+          />
+          <p class="my-3">
+            Just like any Indian kid's life turns into full fledged preparation
+            sacrificing family life and social life. Mine didn't turn any
+            better! There were days, not once but many, when I couldn't see my
+            father although we lived under the same roof. I felt the heat that
+            preparing for college isn't going to be easy. Oh yes! It all paid
+            off when I scored a perfect score in the 3 SAT Subject Tests - Math
+            Level 2, Chemistry and Physics. I was the happiest person on this
+            planet when I got my grade XII result of 94.8 %. I assure you that
+            you'll never be able to find a happier person than I was. I was
+            literally on top of the world. But, other things didn't turn the way
+            I wanted them to be. I got rejected in the DASA quota for pool of
+            colleges that I had given, mind you that I scored the maximum
+            achievable score in those exams and still couldn't get through. For
+            those, who found it wague, DASA is like JoSAA for IITs, NITs and
+            other central government undertaking colleges, but for
+            Non-resdiential Indians. It was one of the darkest phases in my
+            life. I was hoping for a light at the end of the road. Let me tell
+            you I did apply to two other institutions out of safety for a
+            backup, it came in handy, got through at both places. One, the
+            mighty Anna University's College of Engineering, and the other is my
+            love, SSN College of Engineering. Here, I am today, a proud SSNite!
+            I don't regret choosing SSN over CEG even a single day. I just love
+            the college's vibe and ambience. And I assure you will do too!
+          </p>
+        </article>
+      </section>
+    </main>
+    <footer class="p-2 text-sm text-center text-slate-500">
+      Made with ❤️ using Vanilla HTML, CSS and a 🧂 of Tailwind 😬
+    </footer>
+  </body>
+</html>

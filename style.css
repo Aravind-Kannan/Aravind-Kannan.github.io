@@ -1,0 +1,12 @@
+code {
+  color: red;
+  background-color: #ffcccb;
+  border-radius: 5px;
+  padding: 0 5px;
+}
+
+#form-bg {
+  background-image: url("assets/form.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}

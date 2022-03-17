@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Academic Proficiency | Aravind Kannan</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+
+      @layer components {
+        .navbar-item {
+          @apply p-2 rounded-xl hover:bg-gradient-to-r hover:from-red-600 hover:to-purple-600 hover:text-white ease-in-out duration-500;
+        }
+        .navbar-item--selected {
+          @apply p-2 rounded-xl bg-gradient-to-r from-red-600 to-purple-600 text-white ease-in-out duration-500;
+        }
+        .table-item {
+          @apply border border-white h-full;
+        }
+        td {
+          @apply my-4;
+        }
+      }
+    </style>
+  </head>
+  <body class="h-screen flex flex-col bg-black text-white">
+    <header>
+      <nav
+        class="bg-gradient-to-r from-red-600 to-purple-600 bg-clip-text text-transparent flex flex-row justify-between p-3 font-semibold border-1 border-white"
+      >
+        <h1 class="m-2 text-3xl">Aravind Kannan</h1>
+        <ul class="flex flex-row gap-4 self-center">
+          <li class="navbar-item">
+            <a href="index.html" target="_blank">Personal Information</a>
+          </li>
+          <li class="navbar-item">
+            <a href="journey.html" target="_blank">Journey</a>
+          </li>
+          <li class="navbar-item">
+            <a href="area.html" target="_blank">Area of interest</a>
+          </li>
+          <li class="navbar-item--selected">
+            <a href="academic.html" target="_blank">
+              Academic proficieny details
+            </a>
+          </li>
+          <li class="navbar-item">
+            <a href="events.html" target="_blank">Events organized</a>
+          </li>
+          <li class="navbar-item">
+            <a href="feedback.html" target="_blank">Feedback</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main class="flex-1 px-10">
+      <table class="mx-48">
+        <tbody>
+          <tr>
+            <td class="border-2 border-white p-4">
+              <img
+                class="object-cover h-24"
+                src="assets/ssn-logo.png"
+                alt="Logo of SSN CE"
+                title="Logo of SSN CE"
+              />
+              <h3 class="px-4 py-3"></h3>
+            </td>
+            <td class="border-2 border-white p-5">
+              <h2 class="font-bold text-xl">
+                Sri Sivasubramaniya Nadar College of Engineering, Chennai, India
+              </h2>
+              <p>Bachelor of Engineering - BE</p>
+              <p>2019-2023</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="border-2 border-white p-4 text-center">
+              <img
+                class="object-cover h-24"
+                src="assets/bps-logo.jpg"
+                alt="Logo of BPS"
+                title="Logo of BPS"
+              />
+              <h3 class="px-4 py-3"></h3>
+            </td>
+            <td class="border-2 border-white p-5">
+              <h2 class="font-bold text-xl">
+                Birla Public School, Doha, Qatar
+              </h2>
+              <p>Class XII - 474/500</p>
+              <p>Class X (CGPA) - 10/10</p>
+              <p>2007-2019</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+    <footer class="p-2 text-sm text-center">
+      Made with ❤️ using Vanilla HTML, CSS and a 🧂 of Tailwind 😬
+    </footer>
+  </body>
+</html>
