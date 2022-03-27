@@ -67,26 +67,29 @@
         </ul>
       </nav>
     </header>
+
     <main id="form-bg" class="flex-1 grid grid-cols-3">
       <form
         class="backdrop-blur-xl bg-white/30 rounded-xl col-start-2 flex flex-col gap-4 p-5 m-5"
-        onsubmit="alert('Sorry! Can not submit form as the page is static...')"
+        onsubmit="alert('Thank you for submitting!')"
+        action="thanks.html"
       >
-        <label for="name">Name:</label>
-        <input type="text" />
-        <label for="email">Email:</label>
-        <input type="email" />
-        <label for="mobile">Mobile:</label>
+        <label for="name">Name:<span id="req">*</span></label>
+        <input type="text" required />
+        <label for="email">Email:<span id="req">*</span></label>
+        <input type="email" required />
+        <label for="mobile">Mobile:<span id="req">*</span></label>
         <input
           type="tel"
           name="mobile"
-          pattern="+91-[0-9]{10}"
-          placeholder="+91-9876543210"
+          pattern="[6789][0-9]{9}"
+          placeholder="XXXXXXXXXX"
+          required
         />
 
-        <label for="rating">Rating:</label>
-        <select name="rating" id="rating-select">
-          <option value="none">-----</option>
+        <label for="rating">Rating:<span id="req">*</span></label>
+        <select name="rating" id="rating" required>
+          <option value="">-----</option>
           <option value="one">1</option>
           <option value="two">2</option>
           <option value="three">3</option>
@@ -95,8 +98,8 @@
         </select>
 
         <div>
-          <p>Do you like the website?</p>
-          <input type="radio" id="yes" name="like" value="true" />
+          <p>Do you like the website?<span id="req">*</span></p>
+          <input type="radio" id="yes" name="like" value="true" required />
           <label for="yes">Yes</label>
           <input type="radio" id="no" name="like" value="false" />
           <label for="no">No</label>

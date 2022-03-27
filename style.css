@@ -10,3 +10,50 @@ code {
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
+
+#req {
+  color: red;
+}
+
+.spinner {
+  transition-property: transform;
+  transition-duration: 2s;
+  /* transition-delay: 1s; */
+  transition-timing-function: ease-in-out;
+}
+
+.spinner:hover {
+  transform: rotate(360deg);
+}
+
+.ball {
+  width: 50px;
+  height: 50px;
+  background-color: blue;
+  border-radius: 50%;
+  position: relative;
+  animation-name: ball-roll;
+  animation-duration: 6s;
+  animation-timing-function: ease-in-out;
+  animation-delay: 1s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  /* animation: <animation-name> <animation-duration> <animation-timing-function> <animation-delay> <animation-iteration-count> <animation-direction> */
+}
+
+@keyframes ball-roll {
+  0% {
+    background-color: red;
+    left: 0%;
+  }
+  50% {
+    background-color: indigo;
+    left: 50%;
+    transform: rotate(180deg);
+  }
+  100% {
+    background-color: purple;
+    left: 95%;
+    transform: rotate(360deg);
+  }
+}
