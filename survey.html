@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Journey | Aravind Kannan</title>
+    <title>Survey | Project | Aravind Kannan</title>
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <style type="text/tailwindcss">
@@ -53,9 +53,6 @@
           <li class="navbar-item">
             <a href="projects.html">Projects</a>
           </li>
-          <li class="navbar-item--selected">
-            <a href="survey.html">Survey</a>
-          </li>
         </ul>
       </nav>
     </header>
@@ -71,6 +68,7 @@
             type="text"
             id="name"
             name="name"
+            required
           />
         </div>
 
@@ -81,6 +79,7 @@
             type="email"
             id="email"
             name="email"
+            required
           />
         </div>
 
@@ -91,6 +90,7 @@
             type="password"
             id="password"
             name="password"
+            required
           />
         </div>
 
@@ -101,6 +101,7 @@
             type="date"
             id="dob"
             name="dob"
+            required
           />
         </div>
 
@@ -177,6 +178,25 @@
 
         displayEntries();
       };
+
+      const dob = document.getElementById("dob");
+
+      dob.addEventListener("input", function (event) {
+        var today = new Date();
+        var birthDate = new Date(dob.value);
+        var age = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+
+        if (age < 18 || age > 55) {
+          dob.setCustomValidity("Age should be between 18 and 55!");
+          dob.reportValidity();
+        } else {
+          dob.setCustomValidity("");
+        }
+      });
 
       let form = document.getElementById("user_form");
       form.addEventListener("submit", saveUserForm, true);
