@@ -153,11 +153,11 @@
 
       const saveUserForm = (event) => {
         event.preventDefault();
-        const name = document.getElementById("name").value;
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-        const dob = document.getElementById("dob").value;
-        const acceptTermsAndConditions =
+        let name = document.getElementById("name").value;
+        let email = document.getElementById("email").value;
+        let password = document.getElementById("password").value;
+        let dob = document.getElementById("dob").value;
+        let acceptTermsAndConditions =
           document.getElementById("acceptTerms").checked;
         const userDetails = {
           name,
@@ -177,6 +177,12 @@
         localStorage.setItem("user-entries", JSON.stringify(userEntries));
 
         displayEntries();
+
+        document.getElementById("name").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("password").value = "";
+        document.getElementById("dob").value = "";
+        document.getElementById("acceptTerms").checked = false;
       };
 
       const dob = document.getElementById("dob");
