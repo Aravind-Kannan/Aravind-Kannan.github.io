@@ -5,22 +5,32 @@ import { Link } from "react-router-dom";
 import { personalInfo } from "../data/info";
 import { useTerminal } from "../context/TerminalContext";
 
-const BOOT_LINES = [
-  { text: `Initializing AravindOS v2.0...`, delay: 0 },
-  { text: `Loading infrastructure knowledge... ✓`, delay: 600 },
-  { text: `Mounting experience volumes... ✓`, delay: 1200 },
-  { text: `Spinning up distributed skills... ✓`, delay: 1800 },
-  { text: `Configuring platform stack... ✓`, delay: 2400 },
-  { text: `All systems nominal. Ready.`, delay: 3000 },
+const BOOT_STEPS = [
+  { type: "command", text: "docker pull aravind/portfolio-v2:latest", windowTitle: "aravind@portfolio — docker — 80x64" },
+  { type: "progress", delay: 100 },
+  { type: "response", text: "Status: Downloaded newer image for aravind/portfolio-v2:latest", delay: 1600 },
+  { type: "command", text: "kubectl apply -f deployment.yaml", windowTitle: "aravind@portfolio — kubectl — 80x64" },
+  { type: "response", text: "deployment.apps/aravind-portfolio created", delay: 400 },
+  { type: "command", text: "kubectl logs deployment/aravind-portfolio", windowTitle: "aravind@portfolio — kubectl — 80x64" },
+  { type: "response", text: "Starting Aravind-Platform-Engine v2.0.4...", delay: 300 },
+  { type: "response", text: ":::'###::::'########:::::'###::::'##::::'##:'####:'##::: ##:'########::\n::'## ##::: ##.... ##:::'## ##::: ##:::: ##:. ##:: ###:: ##: ##.... ##:\n:'##:. ##:: ##:::: ##::'##:. ##:: ##:::: ##:: ##:: ####: ##: ##:::: ##:\n:##:::. ##: ########::'##:::. ##: ##:::: ##:: ##:: ## ## ##: ##:::: ##:\n:#########: ##.. ##::: #########:. ##:: ##::: ##:: ##. ####: ##:::: ##:\n:##.... ##: ##::. ##:: ##.... ##::. ## ##:::: ##:: ##:. ###: ##:::: ##:\n:##:::: ##: ##:::. ##: ##:::: ##:::. ###::::'####: ##::. ##: ########::\n:.:::::..::..:::::..::..:::::..:::::...:::::....::..::::..::........:::\n", delay: 200 },
+  { type: "response", text: "[App] Initializing distributed modules... ✓", delay: 400 },
+  { type: "response", text: "[App] Listening on port :8443", delay: 300 },
+  { type: "command", text: "curl -I https://aravind.sh", windowTitle: "aravind@portfolio — curl — 80x64" },
+  { type: "response", text: "HTTP/2 200 OK", delay: 400 },
+  { type: "response", text: "cache-control: public, max-age=0, must-revalidate", delay: 100 },
+  { type: "response", text: "Deployment verified. Initializing site rendering...", delay: 400 },
 ];
 
 const PROGRESS_BARS = [
-  { label: "Infrastructure Knowledge", pct: 92, delay: 600 },
-  { label: "Cloud Platforms", pct: 87, delay: 1000 },
-  { label: "Automation & CI/CD", pct: 95, delay: 1400 },
+  { label: "ea724a1e: Pull complete", pct: 100, delay: 50, duration: 600 },
+  { label: "36a281fb: Pull complete", pct: 100, delay: 150, duration: 1200 },
+  { label: "9d1c0b7c: Pull complete", pct: 100, delay: 0, duration: 900 },
+  { label: "f2e0a4d5: Pull complete", pct: 100, delay: 300, duration: 500 },
 ];
+;
 
-function ProgressBar({ label, pct, delay }: { label: string; pct: number; delay: number }) {
+function ProgressBar({ label, pct, delay, duration = 1000 }: { label: string; pct: number; delay: number; duration?: number }) {
   const [width, setWidth] = useState(0);
   useEffect(() => {
     const t = setTimeout(() => setWidth(pct), delay);
@@ -28,54 +38,78 @@ function ProgressBar({ label, pct, delay }: { label: string; pct: number; delay:
   }, [pct, delay]);
 
   return (
-    <div className="mb-3">
-      <div className="flex justify-between text-xs mb-1 font-mono">
-        <span className="text-zinc-400">{label}</span>
-        <span className="text-primary-400">{width > 0 ? `${pct}%` : "..."}</span>
+    <div className="mb-2">
+      <div className="flex justify-between text-[10px] mb-1 font-mono">
+        <span className="text-zinc-500 uppercase tracking-tight">{label}</span>
+        <span className="text-primary-400 font-bold">{width > 0 ? (width === 100 ? "Complete" : `${width}%`) : "Waiting..."}</span>
       </div>
-      <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
-        <div
-          className="h-full bg-primary-500 rounded-full transition-all duration-1000 ease-out"
-          style={{ width: `${width}%` }}
+      <div className="h-1 bg-zinc-800/50 rounded-full overflow-hidden">
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: `${width}%` }}
+          transition={{ duration: duration / 1000, ease: "easeInOut" }}
+          className="h-full bg-primary-500/80 rounded-full"
         />
       </div>
     </div>
   );
 }
 
-function BootLine({ text, delay }: { text: string; delay: number }) {
-  const [visible, setVisible] = useState(false);
+function TypewriterCommand({ text, onComplete }: { text: string; onComplete: () => void }) {
+  const [displayed, setDisplayed] = useState("");
+  
   useEffect(() => {
-    const t = setTimeout(() => setVisible(true), delay);
-    return () => clearTimeout(t);
-  }, [delay]);
-
-  if (!visible) return null;
+    let i = 0;
+    const interval = setInterval(() => {
+      setDisplayed(text.slice(0, i + 1));
+      i++;
+      if (i >= text.length) {
+        clearInterval(interval);
+        setTimeout(onComplete, 400); 
+      }
+    }, 25);
+    return () => clearInterval(interval);
+  }, [text, onComplete]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -10 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.3 }}
-      className="flex items-start gap-2 font-mono text-sm"
-    >
-      <ChevronRight className="w-4 h-4 text-primary-500 mt-0.5 flex-shrink-0" />
-      <span className={text.includes("Ready") ? "text-primary-400 font-bold" : "text-zinc-400"}>
-        {text}
-      </span>
-    </motion.div>
+    <div className="flex items-center gap-2 font-mono text-sm mb-1">
+      <ChevronRight className="w-4 h-4 text-primary-500/80 flex-shrink-0" />
+      <span className="text-zinc-300">$ {displayed}</span>
+      <span className="inline-block w-1.5 h-4 bg-primary-500 animate-blink" />
+    </div>
   );
 }
 
 export default function Home() {
   const [booted, setBooted] = useState(false);
+  const [stepIndex, setStepIndex] = useState(0);
+  const [visibleLines, setVisibleLines] = useState<number[]>([]);
+  const [windowTitle, setWindowTitle] = useState("aravind@portfolio — bash — 80x64");
   const { toggleTerminal } = useTerminal();
 
-  // Transition out of boot screen after all lines have loaded
+  // Sequential step controller
   useEffect(() => {
-    const t = setTimeout(() => setBooted(true), 3800);
-    return () => clearTimeout(t);
-  }, []);
+    if (stepIndex >= BOOT_STEPS.length) {
+      const t = setTimeout(() => setBooted(true), 800); // Wait after all steps reach completion
+      return () => clearTimeout(t);
+    }
+
+    const currentStep = BOOT_STEPS[stepIndex];
+
+    if (currentStep.type === "command") {
+      if (currentStep.windowTitle) {
+        setWindowTitle(currentStep.windowTitle);
+      }
+      // Handled by TypewriterCommand's onComplete callback
+    } else {
+      const waitTime = currentStep.delay || 500;
+      const t = setTimeout(() => {
+        setVisibleLines((prev) => [...prev, stepIndex]);
+        setStepIndex((prev) => prev + 1);
+      }, waitTime);
+      return () => clearTimeout(t);
+    }
+  }, [stepIndex]);
 
   return (
     <div className="flex-grow flex flex-col relative">
@@ -84,8 +118,8 @@ export default function Home() {
           /* ─────────── BOOT SCREEN ─────────── */
           <motion.div
             key="boot"
-            exit={{ opacity: 0, scale: 0.97 }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 1.0, ease: "easeInOut" }}
             className="flex-grow flex items-center justify-center min-h-screen pt-16 sm:pt-20 px-4 sm:px-6"
           >
             <div className="w-full max-w-2xl">
@@ -100,35 +134,71 @@ export default function Home() {
                   </div>
                   <div className="flex items-center gap-2 text-zinc-500 text-xs font-mono tracking-wide">
                     <Terminal className="w-3.5 h-3.5" />
-                    AravindOS — bash — 80x24
+                    {windowTitle}
                   </div>
                   <div className="w-12" />
                 </div>
 
                 {/* Terminal body */}
-                <div className="p-6 sm:p-8 space-y-2 min-h-[320px]">
-                  {BOOT_LINES.map((line) => (
-                    <BootLine key={line.text} text={line.text} delay={line.delay} />
-                  ))}
+                <div className="p-6 sm:p-8 space-y-2 min-h-[440px] font-mono select-none bg-[radial-gradient(circle_at_50%_0%,#18181b_0%,#09090b_100%)]">
+                  {BOOT_STEPS.slice(0, stepIndex + 1).map((step, idx) => {
+                    const isVisible = visibleLines.includes(idx);
+                    
+                    if (step.type === "command") {
+                      if (idx === stepIndex && !isVisible && step.text) {
+                        return (
+                          <TypewriterCommand 
+                            key={idx} 
+                            text={step.text} 
+                            onComplete={() => {
+                              setVisibleLines(prev => [...prev, idx]);
+                              setStepIndex(prev => prev + 1);
+                            }} 
+                          />
+                        );
+                      }
+                      return (
+                        <div key={idx} className="flex items-center gap-2 text-sm text-zinc-500/80 mb-1">
+                          <ChevronRight className="w-4 h-4 text-primary-500/40 flex-shrink-0" />
+                          <span>$ {step.text}</span>
+                        </div>
+                      );
+                    }
 
-                  {/* Progress bars appear after initial boot lines */}
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.8 }}
-                    className="pt-4 pb-2"
-                  >
-                    {PROGRESS_BARS.map((bar) => (
-                      <ProgressBar key={bar.label} {...bar} />
-                    ))}
-                  </motion.div>
+                    if (step.type === "progress") {
+                      if (!isVisible) return null;
+                      return (
+                        <motion.div
+                          key={idx}
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          className="pt-2 pb-2"
+                        >
+                          {PROGRESS_BARS.map((bar) => (
+                            <ProgressBar key={bar.label} {...bar} />
+                          ))}
+                        </motion.div>
+                      );
+                    }
 
-                  {/* Blinking cursor at end */}
-                  <div className="flex items-center gap-2 font-mono text-sm pt-1">
-                    <ChevronRight className="w-4 h-4 text-primary-500" />
-                    <span className="text-zinc-300">cd ~/portfolio</span>
-                    <span className="inline-block w-2 h-4 bg-primary-500 animate-blink ml-1" />
-                  </div>
+                    if (!isVisible || !step.text) return null;
+                    return (
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, x: -5 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className={`text-sm tracking-tight font-medium ${
+                          step.text.includes("  ") ? "whitespace-pre leading-none py-1" : "whitespace-pre-wrap leading-tight py-0.5"
+                        } ${
+                          step.text.includes("OK") || step.text.includes("verified") 
+                            ? "text-primary-400 font-bold" 
+                            : "text-zinc-400"
+                        }`}
+                      >
+                        {step.text}
+                      </motion.div>
+                    );
+                  })}
                 </div>
               </div>
 
