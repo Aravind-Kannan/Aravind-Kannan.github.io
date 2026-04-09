@@ -22,31 +22,31 @@ export default function Footer() {
           </div>
 
           {/* Social Links */}
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center gap-6 sm:gap-8">
             <a
               href={personalInfo.socials.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 -m-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:-translate-y-1 transition-all duration-300"
+              className="p-2.5 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:-translate-y-1 transition-all duration-300 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800"
               aria-label="GitHub"
             >
-              <Github className="w-5 h-5" />
+              <Github className="w-6 h-6" />
             </a>
             <a
               href={personalInfo.socials.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 -m-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:-translate-y-1 transition-all duration-300"
+              className="p-2.5 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:-translate-y-1 transition-all duration-300 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800"
               aria-label="LinkedIn"
             >
-              <Linkedin className="w-5 h-5" />
+              <Linkedin className="w-6 h-6" />
             </a>
             <a
               href={personalInfo.socials.email}
-              className="p-2 -m-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:-translate-y-1 transition-all duration-300"
+              className="p-2.5 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:-translate-y-1 transition-all duration-300 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800"
               aria-label="Email"
             >
-              <Mail className="w-5 h-5" />
+              <Mail className="w-6 h-6" />
             </a>
           </div>
         </div>

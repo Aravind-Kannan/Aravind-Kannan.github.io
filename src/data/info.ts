@@ -11,6 +11,6 @@ export const personalInfo = {
   socials: {
     github: "https://github.com/Aravind-Kannan",
     linkedin: "https://linkedin.com/in/",
-    email: "mailto:aravind@example.com",
+    email: "mailto:aravindkannan2001@gmail.com",
   }
 };

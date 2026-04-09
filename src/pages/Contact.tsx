@@ -105,7 +105,7 @@ export default function Contact() {
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       className="w-full px-4 sm:px-5 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl bg-zinc-50/50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all dark:text-white shadow-sm placeholder:text-zinc-400 text-sm sm:text-base"
-                      placeholder="Jane Doe"
+                      placeholder="Your name"
                     />
                   </div>
                   <div className="space-y-1.5 sm:space-y-2">
@@ -121,7 +121,7 @@ export default function Contact() {
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       className="w-full px-4 sm:px-5 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl bg-zinc-50/50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all dark:text-white shadow-sm placeholder:text-zinc-400 text-sm sm:text-base"
-                      placeholder="jane@example.com"
+                      placeholder="your@email.com"
                     />
                   </div>
                 </div>
@@ -138,7 +138,7 @@ export default function Contact() {
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     className="w-full px-4 sm:px-5 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-zinc-50/50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 focus:outline-none focus:ring-2 focus:ring-primary-500/60 focus:border-primary-500/60 transition-all resize-none dark:text-white shadow-sm placeholder:text-zinc-400 text-sm sm:text-base"
-                    placeholder="Tell me about your project..."
+                    placeholder="How can I help you?"
                   />
                 </div>
 

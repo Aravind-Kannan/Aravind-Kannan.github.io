@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import type { ReactNode } from "react";
 
 interface TerminalContextType {
@@ -13,9 +13,32 @@ const TerminalContext = createContext<TerminalContextType | undefined>(undefined
 export const TerminalProvider = ({ children }: { children: ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const openTerminal = () => setIsOpen(true);
-  const closeTerminal = () => setIsOpen(false);
-  const toggleTerminal = () => setIsOpen((prev) => !prev);
+  const openTerminal = useCallback(() => setIsOpen(true), []);
+  const closeTerminal = useCallback(() => setIsOpen(false), []);
+  const toggleTerminal = useCallback(() => setIsOpen((prev) => !prev), []);
+
+  // Global Keyboard Listener (always active once Provider mounts)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Toggle on Ctrl+Backtick, Cmd+Backtick, or Alt+Backtick
+      // Supports standard backtick (`) and variants (§ / ± / Backquote code)
+      const isConsoleKey = e.key === '`' || e.key === '§' || e.key === '±' || e.code === 'Backquote';
+      
+      if ((e.ctrlKey || e.metaKey || e.altKey) && isConsoleKey) {
+        e.preventDefault();
+        e.stopImmediatePropagation(); // Ensure no other listener catches this
+        setIsOpen((prev) => !prev);
+      }
+      
+      // Also allow Escape to close the terminal if it's open
+      if (e.key === "Escape" && isOpen) {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown, true); // Capture phase to be sure
+    return () => window.removeEventListener('keydown', handleKeyDown, true);
+  }, [isOpen]);
 
   // Prevent background scrolling when terminal is open
   useEffect(() => {
@@ -24,9 +47,7 @@ export const TerminalProvider = ({ children }: { children: ReactNode }) => {
     } else {
       document.body.style.overflow = "unset";
     }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
+    return () => { document.body.style.overflow = "unset"; };
   }, [isOpen]);
 
   return (

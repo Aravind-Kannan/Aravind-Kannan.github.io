@@ -10,7 +10,7 @@ export const journey: Milestone[] = [
   {
     id: "m4",
     date: "2024 - Present",
-    title: "Platform Engineer",
+    title: "Software Engineer",
     description: "Designing and building scalable developer platforms and Kubernetes infrastructure. Focused on automation, GitOps, and platform engineering.",
     category: "career",
   },

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Terminal, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { personalInfo } from "../data/info";
+import { useTerminal } from "../context/TerminalContext";
 
 const BOOT_LINES = [
   { text: `Initializing AravindOS v2.0...`, delay: 0 },
@@ -68,6 +69,7 @@ function BootLine({ text, delay }: { text: string; delay: number }) {
 
 export default function Home() {
   const [booted, setBooted] = useState(false);
+  const { toggleTerminal } = useTerminal();
 
   // Transition out of boot screen after all lines have loaded
   useEffect(() => {
@@ -170,10 +172,10 @@ export default function Home() {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tighter text-zinc-900 dark:text-zinc-50 leading-[0.9] mb-8"
+                  className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tight text-zinc-900 dark:text-zinc-50 leading-[1.1] mb-10 sm:mb-12"
                 >
                   Hi, I'm <br />
-                  <span className="text-primary-500">{personalInfo.name}.</span>
+                  <span className="text-primary-500 whitespace-nowrap">{personalInfo.name}.</span>
                 </motion.h1>
 
                 <motion.p
@@ -191,7 +193,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7 }}
-                  className="flex flex-col sm:flex-row gap-4"
+                  className="flex flex-col sm:flex-row flex-wrap gap-4"
                 >
                   <Link
                     to="/projects"
@@ -206,23 +208,23 @@ export default function Home() {
                   >
                     My Journey
                   </Link>
+
+                  <button
+                    onClick={toggleTerminal}
+                    className="group inline-flex items-center justify-center gap-2 px-6 py-4 text-sm font-mono font-medium text-zinc-500 dark:text-zinc-500 hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
+                    aria-label="Open diagnostic terminal"
+                  >
+                    <Terminal className="w-4 h-4 group-hover:animate-pulse" />
+                    <span>Launch Console</span>
+                    <span className="hidden lg:inline text-[10px] opacity-40 ml-1 border border-current rounded px-1 group-hover:opacity-100 transition-opacity">
+                      ⌘ + `
+                    </span>
+                  </button>
                 </motion.div>
               </div>
             </section>
 
-            {/* About strip */}
-            <section className="border-t border-zinc-200/50 dark:border-zinc-800/50 py-16 px-4">
-              <div className="max-w-3xl mx-auto text-center">
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ duration: 0.8 }}
-                  className="text-xl sm:text-2xl text-zinc-600 dark:text-zinc-400 leading-relaxed font-light"
-                >
-                  {personalInfo.aboutPreview}
-                </motion.p>
-              </div>
-            </section>
+
           </motion.div>
         )}
       </AnimatePresence>
