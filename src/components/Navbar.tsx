@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Moon, Sun, Terminal } from "lucide-react";
 import { useTheme } from "../hooks/useTheme";
+import { useTerminal } from "../context/TerminalContext";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
@@ -15,8 +16,10 @@ const navLinks = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [clickCount, setClickCount] = useState(0);
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
+  const { toggleTerminal } = useTerminal();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,14 +45,23 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20 transition-all duration-500">
           {/* Logo / Brand */}
-          <Link to="/" className="flex items-center gap-2.5 group relative z-10">
+          <div 
+            onClick={() => {
+              setClickCount(prev => prev + 1);
+              if (clickCount + 1 >= 5) {
+                toggleTerminal();
+                setClickCount(0);
+              }
+            }}
+            className="flex items-center gap-2.5 group relative z-10 cursor-pointer"
+          >
             <div className="w-8 h-8 rounded-lg bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-3 shadow-sm">
               <Terminal className="w-4 h-4 text-zinc-50 dark:text-zinc-900" />
             </div>
-            <span className="font-mono font-bold text-lg tracking-tight text-zinc-900 dark:text-zinc-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-              Aravind.dev
+            <span className="font-mono font-bold text-lg tracking-tight text-zinc-900 dark:text-zinc-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors select-none">
+              Aravind Kannan
             </span>
-          </Link>
+          </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1.5 relative z-10">
