@@ -33,60 +33,74 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ease-out border-b ${
         scrolled
-          ? "bg-zinc-50/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800 shadow-sm"
-          : "bg-zinc-50 dark:bg-zinc-950 border-b border-transparent"
+          ? "bg-white/70 dark:bg-zinc-950/70 backdrop-blur-xl border-zinc-200/50 dark:border-zinc-800/50 shadow-[0_1px_3px_0_rgba(0,0,0,0.02)]"
+          : "bg-transparent border-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-16 sm:h-20 transition-all duration-500">
           {/* Logo / Brand */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <Terminal className="w-6 h-6 text-primary-500 group-hover:text-primary-600 transition-colors" />
-            <span className="font-mono font-semibold text-lg tracking-tight">
+          <Link to="/" className="flex items-center gap-2.5 group relative z-10">
+            <div className="w-8 h-8 rounded-lg bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-3 shadow-sm">
+              <Terminal className="w-4 h-4 text-zinc-50 dark:text-zinc-900" />
+            </div>
+            <span className="font-mono font-bold text-lg tracking-tight text-zinc-900 dark:text-zinc-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
               Aravind.dev
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                className={`text-sm font-medium transition-colors hover:text-primary-500 ${
-                  location.pathname === link.path
-                    ? "text-primary-500"
-                    : "text-zinc-600 dark:text-zinc-400"
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
+          <nav className="hidden md:flex items-center gap-1.5 relative z-10">
+            {navLinks.map((link) => {
+              const isActive = location.pathname === link.path;
+              return (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className={`relative px-4 py-2 text-sm font-medium transition-colors rounded-full ${
+                    isActive
+                      ? "text-zinc-900 dark:text-zinc-100"
+                      : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50"
+                  }`}
+                >
+                  {link.name}
+                  {isActive && (
+                    <motion.div
+                      layoutId="navbar-indicator"
+                      className="absolute inset-0 rounded-full bg-zinc-200/40 dark:bg-zinc-800/60 -z-10"
+                      transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                    />
+                  )}
+                </Link>
+              );
+            })}
+
+            <div className="w-px h-5 bg-zinc-300 dark:bg-zinc-800 mx-2" />
 
             <button
               onClick={toggleTheme}
-              className="p-2 ml-4 rounded-full bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-600 dark:text-zinc-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
+              className="p-2.5 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-primary-500 dark:hover:text-primary-400 transition-all active:scale-95"
               aria-label="Toggle Theme"
             >
               {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
           </nav>
 
-          {/* Mobile menu button */}
-          <div className="flex items-center gap-4 md:hidden">
+          {/* Mobile menu triggers */}
+          <div className="flex items-center gap-3 md:hidden relative z-10">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-600 dark:text-zinc-400"
+              className="p-2.5 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400"
             >
-              {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-zinc-600 dark:text-zinc-400 hover:text-primary-500 focus:outline-none"
+              className="p-2.5 rounded-full bg-zinc-900 dark:bg-zinc-100 text-zinc-50 dark:text-zinc-900 hover:scale-105 transition-transform focus:outline-none"
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
             </button>
           </div>
         </div>
@@ -96,24 +110,30 @@ export default function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 overflow-hidden"
+            initial={{ opacity: 0, y: -20, filter: "blur(10px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            exit={{ opacity: 0, y: -20, filter: "blur(10px)", transition: { duration: 0.2 } }}
+            className="md:hidden absolute top-full inset-x-0 border-b border-zinc-200/80 dark:border-zinc-800/80 bg-white/95 dark:bg-zinc-950/98 backdrop-blur-xl shadow-xl overflow-hidden"
           >
-            <div className="px-4 py-4 space-y-3">
-              {navLinks.map((link) => (
-                <Link
+            <div className="px-4 py-6 space-y-2">
+              {navLinks.map((link, i) => (
+                <motion.div
                   key={link.name}
-                  to={link.path}
-                  className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                    location.pathname === link.path
-                      ? "bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400"
-                      : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800/50"
-                  }`}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 }}
                 >
-                  {link.name}
-                </Link>
+                  <Link
+                    to={link.path}
+                    className={`block px-4 py-3 rounded-xl text-base font-medium transition-all ${
+                      location.pathname === link.path
+                        ? "bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100"
+                        : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900/50 hover:pl-6"
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                </motion.div>
               ))}
             </div>
           </motion.div>

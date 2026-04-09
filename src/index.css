@@ -16,13 +16,13 @@
 
 @layer base {
   :root {
-    --bg-color: #fafafa;
+    --bg-color: #fdfdfc; /* Warmer light mode */
     --text-color: #18181b;
   }
 
   .dark {
-    --bg-color: #09090b;
-    --text-color: #fafafa;
+    --bg-color: #030303; /* Extremely deep, OLED-like base */
+    --text-color: #e4e4e7; /* Softer text contrast than pure white */
   }
 
   body {
@@ -31,20 +31,38 @@
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* subtle noise texture for premium feel */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.015'/%3E%3C/svg%3E");
+    background-attachment: fixed;
+  }
+
+  /* Headings with tighter tracking */
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.02em;
+  }
+  
+  /* Focus rings */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary-500/60 ring-offset-2 ring-offset-zinc-50 dark:ring-offset-black transition-shadow;
   }
 
   /* Custom scrollbar */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
   }
   ::-webkit-scrollbar-track {
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-zinc-300 rounded-full dark:bg-zinc-700;
+    @apply bg-zinc-300/50 rounded-full dark:bg-zinc-700/50 backdrop-blur-md;
   }
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-primary-500;
+    @apply bg-primary-500/80;
+  }
+  
+  /* Selection */
+  ::selection {
+    @apply bg-primary-500/20 text-primary-900 dark:text-primary-100;
   }
 }
