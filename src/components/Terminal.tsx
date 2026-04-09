@@ -108,11 +108,14 @@ export default function Terminal() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: "-100%", transition: { duration: 0.3, ease: "easeInOut" } }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className={`fixed z-[100] bg-black/95 backdrop-blur-2xl border-zinc-800 shadow-2xl flex flex-col overflow-hidden font-mono text-sm sm:text-base ${
+          className={`fixed z-[100] bg-black/95 backdrop-blur-2xl border-zinc-800 shadow-2xl flex flex-col overflow-hidden font-mono text-xs sm:text-sm ${
             isFullScreen 
               ? "inset-0 border-0" 
-              : "top-4 sm:top-20 inset-x-4 sm:inset-x-20 bottom-4 sm:bottom-20 rounded-2xl border"
+              : "top-4 inset-x-3 sm:inset-x-12 md:inset-x-20 bottom-4 rounded-2xl border"
           }`}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Interactive terminal"
           onClick={() => inputRef.current?.focus()}
         >
           {/* Mac-style Terminal Header */}

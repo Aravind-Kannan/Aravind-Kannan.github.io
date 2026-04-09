@@ -26,8 +26,15 @@ export default function MainLayout() {
 
   return (
     <div className="min-h-screen flex flex-col font-sans selection:bg-primary-500/30">
+      {/* Skip to main content — visible on keyboard focus for screen reader / keyboard users */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-primary-600 focus:text-white focus:rounded-xl focus:font-medium focus:shadow-lg focus:outline-none"
+      >
+        Skip to main content
+      </a>
       <Navbar />
-      <main className="flex-grow flex flex-col relative">
+      <main id="main-content" className="flex-grow flex flex-col relative">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={location.pathname}

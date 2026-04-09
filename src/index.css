@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @custom-variant dark (&:is(.dark *));
+@custom-variant xs (&:is([class*="xs"] *));
 
 @theme {
   --color-primary-50: #f0fdfa;
@@ -80,5 +81,17 @@
   .scrollbar-none {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
+  }
+}
+
+/* Reduced motion: disable all transitions and animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

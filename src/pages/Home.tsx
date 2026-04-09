@@ -84,7 +84,7 @@ export default function Home() {
             key="boot"
             exit={{ opacity: 0, scale: 0.97 }}
             transition={{ duration: 0.6, ease: "easeInOut" }}
-            className="flex-grow flex items-center justify-center min-h-[90vh] px-4"
+            className="flex-grow flex items-center justify-center min-h-screen pt-16 sm:pt-20 px-4 sm:px-6"
           >
             <div className="w-full max-w-2xl">
               {/* Terminal window chrome */}
