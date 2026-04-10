@@ -3,15 +3,18 @@ import type { ReactNode } from "react";
 
 interface TerminalContextType {
   isOpen: boolean;
+  isBooting: boolean;
   openTerminal: () => void;
   closeTerminal: () => void;
   toggleTerminal: () => void;
+  setIsBooting: (val: boolean) => void;
 }
 
 const TerminalContext = createContext<TerminalContextType | undefined>(undefined);
 
 export const TerminalProvider = ({ children }: { children: ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isBooting, setIsBooting] = useState(false);
 
   const openTerminal = useCallback(() => setIsOpen(true), []);
   const closeTerminal = useCallback(() => setIsOpen(false), []);
@@ -53,7 +56,7 @@ export const TerminalProvider = ({ children }: { children: ReactNode }) => {
   }, [isOpen]);
 
   return (
-    <TerminalContext.Provider value={{ isOpen, openTerminal, closeTerminal, toggleTerminal }}>
+    <TerminalContext.Provider value={{ isOpen, isBooting, openTerminal, closeTerminal, toggleTerminal, setIsBooting }}>
       {children}
     </TerminalContext.Provider>
   );

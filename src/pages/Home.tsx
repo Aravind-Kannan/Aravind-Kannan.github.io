@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Terminal, ChevronRight } from "lucide-react";
+import { ArrowRight, Terminal, ChevronRight, SkipForward } from "lucide-react";
 import { Link } from "react-router-dom";
 import { personalInfo } from "../data/info";
 import { useTerminal } from "../context/TerminalContext";
@@ -85,12 +85,25 @@ export default function Home() {
   const [stepIndex, setStepIndex] = useState(0);
   const [visibleLines, setVisibleLines] = useState<number[]>([]);
   const [windowTitle, setWindowTitle] = useState("aravind@portfolio — bash — 80x64");
-  const { toggleTerminal } = useTerminal();
+  const { toggleTerminal, setIsBooting } = useTerminal();
+
+  const handleSkip = useCallback(() => {
+    setBooted(true);
+    setIsBooting(false);
+  }, [setIsBooting]);
+
+  // Sync with global boot state to hide navbar/footer
+  useEffect(() => {
+    setIsBooting(!booted);
+  }, [booted, setIsBooting]);
 
   // Sequential step controller
   useEffect(() => {
     if (stepIndex >= BOOT_STEPS.length) {
-      const t = setTimeout(() => setBooted(true), 800); // Wait after all steps reach completion
+      const t = setTimeout(() => {
+        setBooted(true);
+        setIsBooting(false);
+      }, 800);
       return () => clearTimeout(t);
     }
 
@@ -207,6 +220,22 @@ export default function Home() {
               <p className="text-center text-xs text-zinc-600 mt-4 font-mono tracking-widest uppercase">
                 Loading portfolio experience...
               </p>
+
+              {/* Skip CTA */}
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.5 }}
+                className="flex justify-center mt-8"
+              >
+                <button
+                  onClick={handleSkip}
+                  className="group flex items-center gap-2 px-4 py-2 rounded-full border border-zinc-800 bg-zinc-950/50 text-[10px] font-mono uppercase tracking-widest text-zinc-500 hover:text-primary-500 hover:border-primary-500/50 transition-all active:scale-95"
+                >
+                  Skip
+                  <SkipForward className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                </button>
+              </motion.div>
             </div>
           </motion.div>
         ) : (

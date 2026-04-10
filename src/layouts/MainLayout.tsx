@@ -4,9 +4,14 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Terminal from "../components/Terminal";
 import CustomCursor from "../components/CustomCursor";
+import { useTerminal } from "../context/TerminalContext";
 
 export default function MainLayout() {
   const location = useLocation();
+  const { isBooting } = useTerminal();
+  
+  // Only hide on the home page during the boot sequence
+  const showNavFooter = !isBooting || location.pathname !== "/";
 
   return (
     <div className="min-h-screen flex flex-col font-sans selection:bg-primary-500/30 overflow-x-hidden">
@@ -31,7 +36,19 @@ export default function MainLayout() {
       {/* Custom cursor — hidden on touch devices via CSS */}
       <CustomCursor />
 
-      <Navbar />
+      <AnimatePresence>
+        {showNavFooter && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="relative z-[60]"
+          >
+            <Navbar />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <main id="main-content" className="flex-grow flex flex-col relative z-10">
         <AnimatePresence mode="wait" initial={false}>
@@ -48,7 +65,19 @@ export default function MainLayout() {
         </AnimatePresence>
       </main>
 
-      <Footer />
+      <AnimatePresence>
+        {showNavFooter && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
+            <Footer />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
       <Terminal />
     </div>
   );

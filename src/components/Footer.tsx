@@ -19,6 +19,15 @@ export default function Footer() {
             <span className="text-sm text-zinc-500 dark:text-zinc-400 mt-2 font-medium">
               Building robust systems.
             </span>
+            <div className="flex items-center gap-2 mt-4 px-3 py-1 rounded-full bg-zinc-100/50 dark:bg-zinc-800/50 border border-zinc-200/50 dark:border-zinc-700/50">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span className="text-[10px] uppercase tracking-wider font-mono font-bold text-zinc-500 dark:text-zinc-400">
+                Status: Available
+              </span>
+            </div>
           </div>
 
           {/* Social Links */}
