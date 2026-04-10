@@ -182,13 +182,15 @@ export default function Home() {
                     }
 
                     if (!isVisible || !step.text) return null;
+                    const IS_FIGLET = step.text.includes(":::'###");
+
                     return (
                       <motion.div
                         key={idx}
                         initial={{ opacity: 0, x: -5 }}
                         animate={{ opacity: 1, x: 0 }}
                         className={`text-sm tracking-tight font-medium ${
-                          step.text.includes("  ") ? "whitespace-pre leading-none py-1" : "whitespace-pre-wrap leading-tight py-0.5"
+                          IS_FIGLET ? "hidden sm:block whitespace-pre leading-none py-1" : "whitespace-pre-wrap leading-tight py-0.5"
                         } ${
                           step.text.includes("OK") || step.text.includes("verified") 
                             ? "text-primary-400 font-bold" 
@@ -287,7 +289,7 @@ export default function Home() {
                     <Terminal className="w-4 h-4 group-hover:animate-pulse" />
                     <span>Launch Console</span>
                     <span className="hidden lg:inline text-[10px] opacity-40 ml-1 border border-current rounded px-1 group-hover:opacity-100 transition-opacity">
-                      ⌘ + `
+                      Ctrl + `
                     </span>
                   </button>
                 </motion.div>

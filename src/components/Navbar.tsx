@@ -119,6 +119,15 @@ export default function Navbar() {
                 ? <Sun className="w-4 h-4" aria-hidden="true" />
                 : <Moon className="w-4 h-4" aria-hidden="true" />}
             </button>
+
+            <button
+              onClick={toggleTerminal}
+              className="p-2.5 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-primary-500 dark:hover:text-primary-400 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+              aria-label="Open Interactive Terminal (Ctrl + `)"
+              title="Terminal (Ctrl + `)"
+            >
+              <Terminal className="w-4 h-4" aria-hidden="true" />
+            </button>
           </nav>
 
           {/* Mobile action buttons */}
@@ -131,6 +140,13 @@ export default function Navbar() {
               {theme === "dark"
                 ? <Sun className="w-4 h-4" aria-hidden="true" />
                 : <Moon className="w-4 h-4" aria-hidden="true" />}
+            </button>
+            <button
+              onClick={toggleTerminal}
+              className="p-2.5 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+              aria-label="Terminal (Ctrl + `)"
+            >
+              <Terminal className="w-4 h-4" aria-hidden="true" />
             </button>
             <button
               onClick={() => setIsOpen(!isOpen)}

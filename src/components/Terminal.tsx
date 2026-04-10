@@ -5,6 +5,8 @@ import { useTerminal } from "../context/TerminalContext";
 import { executeCommand } from "../utils/terminalEngine";
 import type { TerminalState } from "../utils/terminalEngine";
 import { personalInfo } from "../data/info";
+import { projects } from "../data/projects";
+import { journey } from "../data/journey";
 
 export default function Terminal() {
   const { isOpen, closeTerminal } = useTerminal();
@@ -39,7 +41,41 @@ export default function Terminal() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const parts = inputVal.trim().split(" ");
+      const lastPart = parts[parts.length - 1] || "";
+      
+      const commands = ["help", "cat", "cd", "ls", "whoami", "projects", "journey", "contact", "clear", "exit"];
+      
+      // Basic autocomplete for commands if it's the first word
+      if (parts.length <= 1) {
+        const matches = commands.filter(c => c.startsWith(lastPart.toLowerCase()));
+        if (matches.length === 1) {
+          setInputVal(matches[0]);
+          setCursorPos(matches[0].length);
+        }
+      } else if (parts.length === 2) {
+        // Autocomplete for files/dirs if after cat/cd/ls
+        const cmd = parts[0].toLowerCase();
+        if (["cat", "cd", "ls"].includes(cmd)) {
+          let files: string[] = [];
+          if (state.cwd === "~") {
+            files = ["projects/", "journey/", "about.txt", "contact.txt", "skills.txt"];
+          } else if (state.cwd === "~/projects") {
+            files = projects.map(p => `${p.id}.md`);
+          } else if (state.cwd === "~/journey") {
+            files = journey.map(j => `${j.id}.md`);
+          }
+          
+          const matches = files.filter(f => f.startsWith(lastPart.toLowerCase()));
+          if (matches.length === 1) {
+            setInputVal(`${parts[0]} ${matches[0]}`);
+            setCursorPos(`${parts[0]} ${matches[0]}`.length);
+          }
+        }
+      }
+    } else if (e.key === "Enter") {
       const cmd = inputVal;
       if (!cmd.trim()) {
         setState((prev) => ({
@@ -189,7 +225,7 @@ export default function Terminal() {
                   
                   {/* True terminal block cursor that overlays the character */}
                   <div className="relative inline-flex flex-shrink-0 min-w-[8px]">
-                    <div className="absolute inset-0 bg-primary-500 animate-blink shadow-[0_0_8px_rgba(20,184,166,0.3)]" />
+                    <div className="absolute inset-0 bg-primary-500 animate-blink shadow-[0_0_8px_rgba(var(--color-primary-500),0.3)]" />
                     <span className="relative z-10 text-black bg-transparent whitespace-pre">
                       {inputVal[cursorPos] || " "}
                     </span>

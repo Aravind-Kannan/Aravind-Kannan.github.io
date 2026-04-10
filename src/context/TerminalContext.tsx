@@ -20,14 +20,16 @@ export const TerminalProvider = ({ children }: { children: ReactNode }) => {
   // Global Keyboard Listener (always active once Provider mounts)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Toggle on Ctrl+Backtick, Cmd+Backtick, or Alt+Backtick
-      // Supports standard backtick (`) and variants (§ / ± / Backquote code)
-      const isConsoleKey = e.key === '`' || e.key === '§' || e.key === '±' || e.code === 'Backquote';
+      // Hardware-level key code detection for 'Backquote' (the key next to '1')
+      // This is the most reliable way to catch the shortcut across different layouts
+      const isBackquote = e.code === 'Backquote' || e.key === '`' || e.key === '§' || e.key === '±';
+      const isModifier = e.ctrlKey || e.metaKey;
+      const isAltT = (e.altKey || e.ctrlKey) && (e.key === 't' || e.key === 'T');
       
-      if ((e.ctrlKey || e.metaKey || e.altKey) && isConsoleKey) {
+      if ((isModifier && isBackquote) || isAltT) {
         e.preventDefault();
-        e.stopImmediatePropagation(); // Ensure no other listener catches this
-        setIsOpen((prev) => !prev);
+        e.stopImmediatePropagation();
+        toggleTerminal();
       }
       
       // Also allow Escape to close the terminal if it's open
