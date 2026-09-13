@@ -1,3 +1,5 @@
+import resumePdf from "../assets/resume.pdf";
+
 export const personalInfo = {
   name: "Aravind Kannan",
   title: "Software Engineer",
@@ -25,6 +27,8 @@ export const personalInfo = {
     "Observability is not optional",
     "Platforms should reduce toil",
   ],
+  resume: resumePdf,
+  resumeFilename: "Aravind_Kannan_Resume.pdf",
   socials: {
     github: "https://github.com/Aravind-Kannan",
     linkedin: "https://linkedin.com/in/",

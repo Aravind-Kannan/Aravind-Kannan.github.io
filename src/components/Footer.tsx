@@ -1,4 +1,4 @@
-import { Mail } from "lucide-react";
+import { FileText, Mail } from "lucide-react";
 import { Github, Linkedin } from "./Icons";
 import { personalInfo } from "../data/info";
 
@@ -36,6 +36,15 @@ export default function Footer() {
               aria-label="LinkedIn"
             >
               <Linkedin className="w-4 h-4" />
+            </a>
+            <a
+              href={personalInfo.resume}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+              aria-label="Resume PDF"
+            >
+              <FileText className="w-4 h-4" />
             </a>
             <a
               href={personalInfo.socials.email}

@@ -1,4 +1,5 @@
 /* Hallmark · genre: modern-minimal · macrostructure: Letter · design-system: design.md · designed-as-app */
+import { FileDown, FileText } from "lucide-react";
 import { personalInfo } from "../data/info";
 import { PageShell, PageHeader } from "../components/PageShell";
 
@@ -7,7 +8,7 @@ export default function About() {
     <PageShell>
       <PageHeader eyebrow="about / profile" title="About Me" />
 
-      <div className="space-y-5 mb-16 sm:mb-20">
+      <div className="space-y-5 mb-8 sm:mb-10">
         {personalInfo.about.map((paragraph) => (
           <p
             key={paragraph.slice(0, 24)}
@@ -16,6 +17,26 @@ export default function About() {
             {paragraph}
           </p>
         ))}
+      </div>
+
+      <div className="flex flex-wrap gap-3 mb-16 sm:mb-20">
+        <a
+          href={personalInfo.resume}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800 rounded-xl px-4 py-2.5 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900/60 active:scale-[0.98] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+        >
+          <FileText className="w-3.5 h-3.5" aria-hidden="true" />
+          View resume
+        </a>
+        <a
+          href={personalInfo.resume}
+          download={personalInfo.resumeFilename}
+          className="inline-flex items-center gap-2 text-sm font-medium text-zinc-600 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800 rounded-xl px-4 py-2.5 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900/60 active:scale-[0.98] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+        >
+          <FileDown className="w-3.5 h-3.5" aria-hidden="true" />
+          Download PDF
+        </a>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 sm:gap-16">

@@ -11,11 +11,19 @@ const channels = [
     label: "GitHub",
     href: personalInfo.socials.github,
     detail: "code & experiments",
+    external: true,
   },
   {
     label: "LinkedIn",
     href: personalInfo.socials.linkedin,
     detail: "work history",
+    external: true,
+  },
+  {
+    label: "Resume",
+    href: personalInfo.resume,
+    detail: "PDF — view or save",
+    external: true,
   },
 ];
 
@@ -118,8 +126,9 @@ export default function Contact() {
                   <li key={channel.label}>
                     <a
                       href={channel.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      {...(channel.external
+                        ? { target: "_blank", rel: "noopener noreferrer" }
+                        : {})}
                       aria-label={`${channel.label} — opens in new tab`}
                       className="group flex items-baseline justify-between gap-4 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset rounded-sm"
                     >

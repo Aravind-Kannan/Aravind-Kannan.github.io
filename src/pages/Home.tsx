@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Terminal, ChevronRight, SkipForward } from "lucide-react";
+import { ArrowRight, Terminal, ChevronRight, SkipForward, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 import { personalInfo } from "../data/info";
 import { useTerminal } from "../context/TerminalContext";
@@ -330,6 +330,15 @@ export default function Home() {
                   >
                     My Journey
                   </Link>
+                  <a
+                    href={personalInfo.resume}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 text-sm font-bold text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all shadow-sm"
+                  >
+                    <FileText className="w-4 h-4" aria-hidden="true" />
+                    Resume
+                  </a>
 
                   <button
                     onClick={toggleTerminal}

@@ -62,6 +62,7 @@ export const executeCommand = (cmdStr: string, state: TerminalState): CommandRes
   <div class="text-primary-500">projects</div><div>List featured projects</div>
   <div class="text-primary-500">journey</div><div>List timeline milestones</div>
   <div class="text-primary-500">contact</div><div>Get contact information</div>
+  <div class="text-primary-500">resume</div><div>Open resume PDF</div>
   <div class="text-primary-500">boot [on|off]</div><div>Deploy sequence easter egg</div>
   <div class="text-primary-500">clear</div><div>Clear the terminal screen</div>
   <div class="text-primary-500">exit</div><div>Return to website GUI</div>
@@ -83,6 +84,13 @@ export const executeCommand = (cmdStr: string, state: TerminalState): CommandRes
         output: `Email:   ${personalInfo.socials.email.replace("mailto:", "")}\nGitHub:  ${personalInfo.socials.github}\nLinkedIn:${personalInfo.socials.linkedin}`,
       };
 
+    case "resume":
+      window.open(personalInfo.resume, "_blank", "noopener,noreferrer");
+      return {
+        output: `Opening ${personalInfo.resumeFilename}…\n<a href="${personalInfo.resume}" target="_blank" rel="noopener noreferrer" class="text-primary-400 underline">Open resume</a> · <a href="${personalInfo.resume}" download="${personalInfo.resumeFilename}" class="text-primary-400 underline">Download</a>`,
+        isHtml: true,
+      };
+
     case "ls": {
       let targetDir = pwd;
       if (args[1]) {
@@ -92,7 +100,7 @@ export const executeCommand = (cmdStr: string, state: TerminalState): CommandRes
       }
 
       if (targetDir === "~") {
-        return { output: `<span class="text-blue-400 font-bold">projects/</span>  <span class="text-blue-400 font-bold">journey/</span>  about.txt  contact.txt  skills.txt`, isHtml: true };
+        return { output: `<span class="text-blue-400 font-bold">projects/</span>  <span class="text-blue-400 font-bold">journey/</span>  about.txt  contact.txt  skills.txt  resume.pdf`, isHtml: true };
       } else if (targetDir === "~/ परियोजनाओं" || targetDir === "~/projects") {
         return { output: projects.map(p => `${p.id}.md`).join("  ") };
       } else if (targetDir === "~/journey") {
@@ -128,6 +136,13 @@ export const executeCommand = (cmdStr: string, state: TerminalState): CommandRes
         }
         if (targetFile === "skills.txt") {
           return { output: personalInfo.toolkit.join(", ") };
+        }
+        if (targetFile === "resume.pdf") {
+          window.open(personalInfo.resume, "_blank", "noopener,noreferrer");
+          return {
+            output: `Opening ${personalInfo.resumeFilename}…\n<a href="${personalInfo.resume}" target="_blank" rel="noopener noreferrer" class="text-primary-400 underline">Open resume</a>`,
+            isHtml: true,
+          };
         }
       } else if (targetDir === "~/projects") {
         const proj = projects.find(p => `${p.id}.md` === targetFile);
