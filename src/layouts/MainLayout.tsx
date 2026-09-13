@@ -1,4 +1,5 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useLocation, useOutlet } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -6,10 +7,21 @@ import Terminal from "../components/Terminal";
 import CustomCursor from "../components/CustomCursor";
 import { useTerminal } from "../context/TerminalContext";
 
+/**
+ * Freeze the matched route element at mount time so AnimatePresence can
+ * keep the *previous* page visible during its exit animation. A live
+ * <Outlet /> would swap both copies to the new route and look blank.
+ */
+function FrozenOutlet() {
+  const element = useOutlet();
+  const [frozen] = useState(element);
+  return frozen;
+}
+
 export default function MainLayout() {
   const location = useLocation();
   const { isBooting } = useTerminal();
-  
+
   // Only hide on the home page during the boot sequence
   const showNavFooter = !isBooting || location.pathname !== "/";
 
@@ -54,13 +66,13 @@ export default function MainLayout() {
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={location.pathname}
-            initial={{ opacity: 0, filter: "blur(4px)", y: 12 }}
-            animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-            exit={{ opacity: 0, filter: "blur(4px)", y: -8, transition: { duration: 0.2 } }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8, transition: { duration: 0.2 } }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             className="flex-grow flex flex-col w-full"
           >
-            <Outlet />
+            <FrozenOutlet />
           </motion.div>
         </AnimatePresence>
       </main>
@@ -77,7 +89,7 @@ export default function MainLayout() {
           </motion.div>
         )}
       </AnimatePresence>
-      
+
       <Terminal />
     </div>
   );

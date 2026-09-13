@@ -28,7 +28,6 @@ const PROGRESS_BARS = [
   { label: "9d1c0b7c: Pull complete", pct: 100, delay: 0, duration: 900 },
   { label: "f2e0a4d5: Pull complete", pct: 100, delay: 300, duration: 500 },
 ];
-;
 
 function ProgressBar({ label, pct, delay, duration = 1000 }: { label: string; pct: number; delay: number; duration?: number }) {
   const [width, setWidth] = useState(0);
@@ -81,29 +80,37 @@ function TypewriterCommand({ text, onComplete }: { text: string; onComplete: () 
 }
 
 export default function Home() {
-  const [booted, setBooted] = useState(false);
+  const { toggleTerminal, setIsBooting, hasBooted, markBooted } = useTerminal();
+  const [booted, setBooted] = useState(hasBooted);
   const [stepIndex, setStepIndex] = useState(0);
   const [visibleLines, setVisibleLines] = useState<number[]>([]);
   const [windowTitle, setWindowTitle] = useState("aravind@portfolio — bash — 80x64");
-  const { toggleTerminal, setIsBooting } = useTerminal();
+
+  const finishBoot = useCallback(() => {
+    setBooted(true);
+    markBooted();
+  }, [markBooted]);
 
   const handleSkip = useCallback(() => {
-    setBooted(true);
-    setIsBooting(false);
-  }, [setIsBooting]);
+    finishBoot();
+  }, [finishBoot]);
 
-  // Sync with global boot state to hide navbar/footer
+  // Sync with global boot state to hide navbar/footer; clear on leave
   useEffect(() => {
+    if (hasBooted) {
+      setIsBooting(false);
+      return;
+    }
     setIsBooting(!booted);
-  }, [booted, setIsBooting]);
+    return () => setIsBooting(false);
+  }, [booted, hasBooted, setIsBooting]);
 
-  // Sequential step controller
+  // Sequential step controller — skip entirely once session already booted
   useEffect(() => {
+    if (hasBooted || booted) return;
+
     if (stepIndex >= BOOT_STEPS.length) {
-      const t = setTimeout(() => {
-        setBooted(true);
-        setIsBooting(false);
-      }, 800);
+      const t = setTimeout(() => finishBoot(), 800);
       return () => clearTimeout(t);
     }
 
@@ -122,7 +129,7 @@ export default function Home() {
       }, waitTime);
       return () => clearTimeout(t);
     }
-  }, [stepIndex]);
+  }, [stepIndex, hasBooted, booted, finishBoot]);
 
   return (
     <div className="flex-grow flex flex-col relative">
@@ -217,7 +224,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <p className="text-center text-xs text-zinc-600 mt-4 font-mono tracking-widest uppercase">
+              <p className="text-center text-xs text-zinc-500 dark:text-zinc-600 mt-4 font-mono tracking-widest uppercase">
                 Loading portfolio experience...
               </p>
 
@@ -230,7 +237,7 @@ export default function Home() {
               >
                 <button
                   onClick={handleSkip}
-                  className="group flex items-center gap-2 px-4 py-2 rounded-full border border-zinc-800 bg-zinc-950/50 text-[10px] font-mono uppercase tracking-widest text-zinc-500 hover:text-primary-500 hover:border-primary-500/50 transition-all active:scale-95"
+                  className="group flex items-center gap-2 px-4 py-2 rounded-full border border-zinc-300 dark:border-zinc-800 bg-white/70 dark:bg-zinc-950/50 text-[10px] font-mono uppercase tracking-widest text-zinc-600 dark:text-zinc-500 hover:text-primary-600 dark:hover:text-primary-500 hover:border-primary-500/50 transition-all active:scale-95 shadow-sm dark:shadow-none"
                 >
                   Skip
                   <SkipForward className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />

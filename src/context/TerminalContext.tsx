@@ -4,10 +4,12 @@ import type { ReactNode } from "react";
 interface TerminalContextType {
   isOpen: boolean;
   isBooting: boolean;
+  hasBooted: boolean;
   openTerminal: () => void;
   closeTerminal: () => void;
   toggleTerminal: () => void;
   setIsBooting: (val: boolean) => void;
+  markBooted: () => void;
 }
 
 const TerminalContext = createContext<TerminalContextType | undefined>(undefined);
@@ -15,11 +17,15 @@ const TerminalContext = createContext<TerminalContextType | undefined>(undefined
 export const TerminalProvider = ({ children }: { children: ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isBooting, setIsBooting] = useState(false);
+  const [hasBooted, setHasBooted] = useState(false);
 
   const openTerminal = useCallback(() => setIsOpen(true), []);
   const closeTerminal = useCallback(() => setIsOpen(false), []);
   const toggleTerminal = useCallback(() => setIsOpen((prev) => !prev), []);
-
+  const markBooted = useCallback(() => {
+    setHasBooted(true);
+    setIsBooting(false);
+  }, []);
   // Global Keyboard Listener (always active once Provider mounts)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -56,7 +62,18 @@ export const TerminalProvider = ({ children }: { children: ReactNode }) => {
   }, [isOpen]);
 
   return (
-    <TerminalContext.Provider value={{ isOpen, isBooting, openTerminal, closeTerminal, toggleTerminal, setIsBooting }}>
+    <TerminalContext.Provider
+      value={{
+        isOpen,
+        isBooting,
+        hasBooted,
+        openTerminal,
+        closeTerminal,
+        toggleTerminal,
+        setIsBooting,
+        markBooted,
+      }}
+    >
       {children}
     </TerminalContext.Provider>
   );

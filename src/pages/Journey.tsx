@@ -37,7 +37,7 @@ export default function Journey() {
               key={item.id}
               initial={{ opacity: 0, x: -16 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
+              viewport={{ once: true, amount: 0.05, margin: "80px 0px" }}
               transition={{ duration: 0.45, delay: Math.min(index * 0.08, 0.4) }}
               className="relative"
             >
