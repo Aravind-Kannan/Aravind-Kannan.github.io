@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Minimize2, Maximize2 } from "lucide-react";
 import { useTerminal } from "../context/TerminalContext";
@@ -9,7 +10,8 @@ import { projects } from "../data/projects";
 import { journey } from "../data/journey";
 
 export default function Terminal() {
-  const { isOpen, closeTerminal } = useTerminal();
+  const { isOpen, closeTerminal, requestBootReplay } = useTerminal();
+  const navigate = useNavigate();
   const [isFullScreen, setIsFullScreen] = useState(true);
   const [inputVal, setInputVal] = useState("");
   const [historyIndex, setHistoryIndex] = useState(-1);
@@ -46,7 +48,7 @@ export default function Terminal() {
       const parts = inputVal.trim().split(" ");
       const lastPart = parts[parts.length - 1] || "";
       
-      const commands = ["help", "cat", "cd", "ls", "whoami", "projects", "journey", "contact", "clear", "exit"];
+      const commands = ["help", "cat", "cd", "ls", "whoami", "projects", "journey", "contact", "boot", "clear", "exit"];
       
       // Basic autocomplete for commands if it's the first word
       if (parts.length <= 1) {
@@ -87,7 +89,17 @@ export default function Terminal() {
       
       const newHistory: TerminalState["history"] = [...state.history, { type: "input", text: `${state.cwd} $ ${cmd}` }];
       const res = executeCommand(cmd, state);
-      
+
+      if (res.boot) {
+        closeTerminal();
+        setInputVal("");
+        setCursorPos(0);
+        navigate("/");
+        // Let route settle, then kick boot sequence
+        window.setTimeout(() => requestBootReplay(), 50);
+        return;
+      }
+
       if (res.exit) {
         closeTerminal();
         setInputVal("");
@@ -172,8 +184,8 @@ export default function Terminal() {
               >
               </button>
             </div>
-            <div className="text-zinc-400 text-xs font-semibold tracking-wider">
-              aravind — bash — 80x24
+            <div className="text-zinc-400 text-[10px] sm:text-xs font-semibold tracking-wider truncate px-2">
+              aravind — bash
             </div>
             <div className="flex items-center gap-4 text-zinc-500">
               <button onClick={() => setIsFullScreen(!isFullScreen)} className="hover:text-zinc-300 transition-colors hidden sm:block">

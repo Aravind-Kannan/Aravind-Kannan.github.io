@@ -71,16 +71,17 @@ function TypewriterCommand({ text, onComplete }: { text: string; onComplete: () 
   }, [text, onComplete]);
 
   return (
-    <div className="flex items-center gap-2 font-mono text-sm mb-1">
-      <ChevronRight className="w-4 h-4 text-primary-500/80 flex-shrink-0" />
-      <span className="text-zinc-300">$ {displayed}</span>
-      <span className="inline-block w-1.5 h-4 bg-primary-500 animate-blink" />
+    <div className="flex items-start gap-2 font-mono text-xs sm:text-sm mb-1 break-all">
+      <ChevronRight className="w-4 h-4 text-primary-500/80 flex-shrink-0 mt-0.5" />
+      <span className="text-zinc-300 min-w-0">$ {displayed}</span>
+      <span className="inline-block w-1.5 h-4 bg-primary-500 animate-blink flex-shrink-0" />
     </div>
   );
 }
 
 export default function Home() {
-  const { toggleTerminal, setIsBooting, hasBooted, markBooted } = useTerminal();
+  const { toggleTerminal, setIsBooting, hasBooted, markBooted, requestBootReplay } =
+    useTerminal();
   const [booted, setBooted] = useState(hasBooted);
   const [stepIndex, setStepIndex] = useState(0);
   const [visibleLines, setVisibleLines] = useState<number[]>([]);
@@ -95,6 +96,18 @@ export default function Home() {
     finishBoot();
   }, [finishBoot]);
 
+  // Sync local UI when context requests replay (or preference enables boot)
+  useEffect(() => {
+    if (!hasBooted) {
+      setBooted(false);
+      setStepIndex(0);
+      setVisibleLines([]);
+      setWindowTitle("aravind@portfolio — bash — 80x64");
+    } else {
+      setBooted(true);
+    }
+  }, [hasBooted]);
+
   // Sync with global boot state to hide navbar/footer; clear on leave
   useEffect(() => {
     if (hasBooted) {
@@ -105,7 +118,7 @@ export default function Home() {
     return () => setIsBooting(false);
   }, [booted, hasBooted, setIsBooting]);
 
-  // Sequential step controller — skip entirely once session already booted
+  // Sequential step controller — only when easter egg active
   useEffect(() => {
     if (hasBooted || booted) return;
 
@@ -120,7 +133,6 @@ export default function Home() {
       if (currentStep.windowTitle) {
         setWindowTitle(currentStep.windowTitle);
       }
-      // Handled by TypewriterCommand's onComplete callback
     } else {
       const waitTime = currentStep.delay || 500;
       const t = setTimeout(() => {
@@ -140,27 +152,27 @@ export default function Home() {
             key="boot"
             exit={{ opacity: 0, scale: 0.98 }}
             transition={{ duration: 1.0, ease: "easeInOut" }}
-            className="flex-grow flex items-center justify-center min-h-screen pt-16 sm:pt-20 px-4 sm:px-6"
+            className="flex-grow flex items-center justify-center min-h-screen pt-16 sm:pt-20 px-3 sm:px-6"
           >
-            <div className="w-full max-w-2xl">
+            <div className="w-full max-w-2xl min-w-0">
               {/* Terminal window chrome */}
-              <div className="bg-zinc-950 rounded-2xl border border-zinc-800 shadow-2xl shadow-black/50 overflow-hidden">
+              <div className="bg-zinc-950 rounded-xl sm:rounded-2xl border border-zinc-800 shadow-2xl shadow-black/50 overflow-hidden">
                 {/* Title bar */}
-                <div className="flex items-center justify-between px-4 py-3 bg-zinc-900 border-b border-zinc-800">
-                  <div className="flex gap-1.5">
+                <div className="flex items-center justify-between gap-2 px-3 sm:px-4 py-3 bg-zinc-900 border-b border-zinc-800">
+                  <div className="flex gap-1.5 flex-shrink-0">
                     <div className="w-3 h-3 rounded-full bg-red-500/70" />
                     <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
                     <div className="w-3 h-3 rounded-full bg-green-500/70" />
                   </div>
-                  <div className="flex items-center gap-2 text-zinc-500 text-xs font-mono tracking-wide">
-                    <Terminal className="w-3.5 h-3.5" />
-                    {windowTitle}
+                  <div className="flex items-center gap-2 text-zinc-500 text-[10px] sm:text-xs font-mono tracking-wide min-w-0 truncate">
+                    <Terminal className="w-3.5 h-3.5 flex-shrink-0" />
+                    <span className="truncate">{windowTitle}</span>
                   </div>
-                  <div className="w-12" />
+                  <div className="w-8 sm:w-12 flex-shrink-0" />
                 </div>
 
                 {/* Terminal body */}
-                <div className="p-6 sm:p-8 space-y-2 min-h-[440px] font-mono select-none bg-[radial-gradient(circle_at_50%_0%,#18181b_0%,#09090b_100%)]">
+                <div className="p-4 sm:p-8 space-y-2 min-h-[280px] sm:min-h-[440px] font-mono select-none overflow-x-auto bg-[radial-gradient(circle_at_50%_0%,#18181b_0%,#09090b_100%)]">
                   {BOOT_STEPS.slice(0, stepIndex + 1).map((step, idx) => {
                     const isVisible = visibleLines.includes(idx);
                     
@@ -254,43 +266,45 @@ export default function Home() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="flex-grow flex flex-col"
           >
-            {/* Glow background */}
-            <div className="absolute top-0 inset-x-0 h-[600px] pointer-events-none -z-10">
-              <div className="absolute top-[-5%] left-[15%] w-[700px] h-[700px] rounded-full bg-primary-500/5 dark:bg-primary-500/10 blur-[120px]" />
+            {/* Glow background — capped so it can't blow past viewport on mobile */}
+            <div className="absolute top-0 inset-x-0 h-[420px] sm:h-[600px] pointer-events-none -z-10 overflow-hidden">
+              <div className="absolute top-[-10%] left-[10%] w-[220px] h-[220px] sm:w-[500px] sm:h-[500px] md:w-[700px] md:h-[700px] rounded-full bg-primary-500/5 dark:bg-primary-500/10 blur-[60px] sm:blur-[120px]" />
             </div>
 
             {/* Hero section */}
             <section className="flex-grow flex flex-col justify-center min-h-[85vh] px-4 sm:px-8">
-              <div className="max-w-4xl mx-auto w-full">
+              <div className="max-w-4xl mx-auto w-full min-w-0">
                 {/* Breadcrumb shell prompt */}
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="flex items-center gap-2 font-mono text-sm text-zinc-500 mb-10"
+                  className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs sm:text-sm text-zinc-500 mb-6 sm:mb-10"
                 >
                   <span className="text-primary-500 font-bold">aravind@portfolio</span>
                   <span className="text-zinc-600">:</span>
                   <span className="text-blue-400">~</span>
                   <span className="text-zinc-600">$</span>
-                  <span className="ml-1 text-zinc-400">./introduce.sh</span>
+                  <span className="text-zinc-400">./introduce.sh</span>
                 </motion.div>
 
                 <motion.h1
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tight text-zinc-900 dark:text-zinc-50 leading-[1.1] mb-10 sm:mb-12"
+                  className="text-[clamp(2rem,8vw,5.5rem)] font-black tracking-tight text-zinc-900 dark:text-zinc-50 leading-[1.1] mb-6 sm:mb-12 min-w-0"
                 >
                   Hi, I'm <br />
-                  <span className="text-primary-500 whitespace-nowrap">{personalInfo.name}.</span>
+                  <span className="text-primary-500 break-words [overflow-wrap:anywhere]">
+                    {personalInfo.name}.
+                  </span>
                 </motion.h1>
 
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5, duration: 0.7 }}
-                  className="text-xl sm:text-2xl text-zinc-500 dark:text-zinc-400 font-light leading-relaxed max-w-2xl mb-12"
+                  className="text-base sm:text-xl md:text-2xl text-zinc-500 dark:text-zinc-400 font-light leading-relaxed max-w-2xl mb-8 sm:mb-12"
                 >
                   Building <span className="text-zinc-900 dark:text-zinc-100 font-medium">robust infrastructure</span>,{" "}
                   <span className="text-zinc-900 dark:text-zinc-100 font-medium">platforms</span>, and{" "}
@@ -301,25 +315,25 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7 }}
-                  className="flex flex-col sm:flex-row flex-wrap gap-4"
+                  className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4"
                 >
                   <Link
                     to="/projects"
-                    className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-bold text-white bg-primary-600 hover:bg-primary-500 rounded-2xl shadow-lg shadow-primary-500/20 transition-all hover:scale-[1.02] active:scale-95"
+                    className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 text-sm font-bold text-white bg-primary-600 hover:bg-primary-500 rounded-2xl shadow-lg shadow-primary-500/20 transition-all hover:scale-[1.02] active:scale-95"
                   >
                     Explore My Work
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                   <Link
                     to="/journey"
-                    className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-bold text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all shadow-sm"
+                    className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 text-sm font-bold text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all shadow-sm"
                   >
                     My Journey
                   </Link>
 
                   <button
                     onClick={toggleTerminal}
-                    className="group inline-flex items-center justify-center gap-2 px-6 py-4 text-sm font-mono font-medium text-zinc-500 dark:text-zinc-500 hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
+                    className="group inline-flex w-full sm:w-auto items-center justify-center gap-2 px-6 py-3.5 sm:py-4 text-sm font-mono font-medium text-zinc-500 dark:text-zinc-500 hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
                     aria-label="Open diagnostic terminal"
                   >
                     <Terminal className="w-4 h-4 group-hover:animate-pulse" />
@@ -329,6 +343,18 @@ export default function Home() {
                     </span>
                   </button>
                 </motion.div>
+
+                <p className="mt-6 sm:mt-8 text-xs font-mono text-zinc-400 dark:text-zinc-600 break-words">
+                  <button
+                    type="button"
+                    onClick={requestBootReplay}
+                    className="hover:text-primary-500 dark:hover:text-primary-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded-sm"
+                  >
+                    replay deploy
+                  </button>
+                  <span className="mx-2 opacity-40">·</span>
+                  <span className="opacity-70">?boot · console: boot</span>
+                </p>
               </div>
             </section>
 

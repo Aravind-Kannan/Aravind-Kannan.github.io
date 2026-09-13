@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import type { ReactNode } from "react";
+import { prefersReducedMotion, shouldPlayBootOnLoad } from "../utils/bootPreference";
 
 interface TerminalContextType {
   isOpen: boolean;
@@ -10,6 +11,8 @@ interface TerminalContextType {
   toggleTerminal: () => void;
   setIsBooting: (val: boolean) => void;
   markBooted: () => void;
+  /** Replay deploy/boot sequence (easter egg). */
+  requestBootReplay: () => void;
 }
 
 const TerminalContext = createContext<TerminalContextType | undefined>(undefined);
@@ -17,7 +20,8 @@ const TerminalContext = createContext<TerminalContextType | undefined>(undefined
 export const TerminalProvider = ({ children }: { children: ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isBooting, setIsBooting] = useState(false);
-  const [hasBooted, setHasBooted] = useState(false);
+  // Default: already "booted" — animation is opt-in easter egg
+  const [hasBooted, setHasBooted] = useState(() => !shouldPlayBootOnLoad());
 
   const openTerminal = useCallback(() => setIsOpen(true), []);
   const closeTerminal = useCallback(() => setIsOpen(false), []);
@@ -26,39 +30,44 @@ export const TerminalProvider = ({ children }: { children: ReactNode }) => {
     setHasBooted(true);
     setIsBooting(false);
   }, []);
+  const requestBootReplay = useCallback(() => {
+    if (prefersReducedMotion()) return;
+    setIsOpen(false);
+    setHasBooted(false);
+    setIsBooting(true);
+  }, []);
+
   // Global Keyboard Listener (always active once Provider mounts)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Hardware-level key code detection for 'Backquote' (the key next to '1')
-      // This is the most reliable way to catch the shortcut across different layouts
-      const isBackquote = e.code === 'Backquote' || e.key === '`' || e.key === '§' || e.key === '±';
+      const isBackquote = e.code === "Backquote" || e.key === "`" || e.key === "§" || e.key === "±";
       const isModifier = e.ctrlKey || e.metaKey;
-      const isAltT = (e.altKey || e.ctrlKey) && (e.key === 't' || e.key === 'T');
-      
+      const isAltT = (e.altKey || e.ctrlKey) && (e.key === "t" || e.key === "T");
+
       if ((isModifier && isBackquote) || isAltT) {
         e.preventDefault();
         e.stopImmediatePropagation();
         toggleTerminal();
       }
-      
-      // Also allow Escape to close the terminal if it's open
+
       if (e.key === "Escape" && isOpen) {
         setIsOpen(false);
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown, true); // Capture phase to be sure
-    return () => window.removeEventListener('keydown', handleKeyDown, true);
-  }, [isOpen]);
+    window.addEventListener("keydown", handleKeyDown, true);
+    return () => window.removeEventListener("keydown", handleKeyDown, true);
+  }, [isOpen, toggleTerminal]);
 
-  // Prevent background scrolling when terminal is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
     }
-    return () => { document.body.style.overflow = "unset"; };
+    return () => {
+      document.body.style.overflow = "unset";
+    };
   }, [isOpen]);
 
   return (
@@ -72,6 +81,7 @@ export const TerminalProvider = ({ children }: { children: ReactNode }) => {
         toggleTerminal,
         setIsBooting,
         markBooted,
+        requestBootReplay,
       }}
     >
       {children}

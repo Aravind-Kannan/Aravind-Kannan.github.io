@@ -1,11 +1,8 @@
-/* Hallmark · macrostructure: Letter · tone: technical-intimate
- * theme: site-system (zinc paper · primary blue · Inter + Roboto Mono)
- * enrichment: none · nav/footer: existing site chrome
- */
+/* Hallmark · genre: modern-minimal · macrostructure: Letter · design-system: design.md · designed-as-app */
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { ArrowUpRight, Check, Copy } from "lucide-react";
 import { personalInfo } from "../data/info";
+import { PageShell, PageHeader } from "../components/PageShell";
 
 const email = personalInfo.socials.email.replace("mailto:", "");
 
@@ -36,24 +33,12 @@ export default function Contact() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-20 w-full flex-grow relative">
-      <motion.article
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-        className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start"
-      >
-        {/* Letter column */}
+    <PageShell>
+      <PageHeader eyebrow="contact / open channel" title="Hello —" />
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
         <div className="lg:col-span-7 max-w-[36rem]">
-          <p className="font-mono text-xs sm:text-sm tracking-wide text-primary-600 dark:text-primary-400 mb-8 sm:mb-10">
-            contact / open channel
-          </p>
-
-          <h1 className="text-3xl sm:text-4xl font-medium tracking-tight text-zinc-900 dark:text-zinc-50 mb-8 sm:mb-10">
-            Hello —
-          </h1>
-
-          <div className="space-y-5 text-base sm:text-lg text-zinc-600 dark:text-zinc-400 font-light leading-relaxed">
+          <div className="space-y-4 text-sm sm:text-base text-zinc-600 dark:text-zinc-400 font-light leading-relaxed">
             <p>
               If you want to talk platforms, distributed systems, open source, or
               a role that needs someone who enjoys the messy middle between code
@@ -82,8 +67,7 @@ export default function Contact() {
           </p>
         </div>
 
-        {/* Channel column */}
-        <aside className="lg:col-span-5 lg:pt-16">
+        <aside className="lg:col-span-5">
           <div className="border-t border-zinc-200 dark:border-zinc-800 pt-8 space-y-10">
             <div>
               <p className="text-xs font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-4">
@@ -93,12 +77,15 @@ export default function Contact() {
                 href={personalInfo.socials.email}
                 className="group block focus-visible:outline-none"
               >
-                <span className="block font-mono text-lg sm:text-xl text-zinc-900 dark:text-zinc-100 break-all group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200">
+                <span className="block font-mono text-base sm:text-lg text-zinc-900 dark:text-zinc-100 break-all group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200">
                   {email}
                 </span>
                 <span className="mt-2 inline-flex items-center gap-1 text-sm text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-700 dark:group-hover:text-zinc-300 transition-colors">
                   Open mail client
-                  <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+                  <ArrowUpRight
+                    className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    aria-hidden="true"
+                  />
                 </span>
               </a>
 
@@ -106,7 +93,7 @@ export default function Contact() {
                 type="button"
                 onClick={copyEmail}
                 aria-live="polite"
-                className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-zinc-600 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800 rounded-xl px-4 py-2.5 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900/60 active:scale-[0.98] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 disabled:opacity-70"
+                className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-zinc-600 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800 rounded-xl px-4 py-2.5 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900/60 active:scale-[0.98] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
               >
                 {copied ? (
                   <>
@@ -137,10 +124,10 @@ export default function Contact() {
                       className="group flex items-baseline justify-between gap-4 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset rounded-sm"
                     >
                       <span>
-                        <span className="block text-base font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                        <span className="block text-sm font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                           {channel.label}
                         </span>
-                        <span className="block text-sm font-light text-zinc-500 dark:text-zinc-500 mt-0.5">
+                        <span className="block text-xs font-light text-zinc-500 dark:text-zinc-500 mt-0.5">
                           {channel.detail}
                         </span>
                       </span>
@@ -155,7 +142,7 @@ export default function Contact() {
             </div>
           </div>
         </aside>
-      </motion.article>
-    </div>
+      </div>
+    </PageShell>
   );
 }

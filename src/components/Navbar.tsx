@@ -65,19 +65,20 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20">
+        <div className="flex items-center justify-between h-14 sm:h-16">
 
           {/* Logo / Brand */}
           <button
             onClick={handleLogoClick}
             aria-label="Home — click 5 times to open terminal"
-            className="flex items-center gap-2.5 group relative z-10 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded-lg"
+            className="flex items-center gap-2 sm:gap-2.5 group relative z-10 min-w-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded-lg"
           >
-            <div className="w-8 h-8 rounded-lg bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-3 shadow-sm">
+            <div className="w-8 h-8 flex-shrink-0 rounded-lg bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-3 shadow-sm">
               <Terminal className="w-4 h-4 text-zinc-50 dark:text-zinc-900" aria-hidden="true" />
             </div>
-            <span className="font-mono font-bold text-base sm:text-lg tracking-tight text-zinc-900 dark:text-zinc-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors select-none">
-              Aravind Kannan
+            <span className="font-semibold text-sm sm:text-base tracking-tight text-zinc-900 dark:text-zinc-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors select-none truncate">
+              <span className="sm:hidden">Aravind</span>
+              <span className="hidden sm:inline">Aravind Kannan</span>
             </span>
           </button>
 
@@ -131,10 +132,10 @@ export default function Navbar() {
           </nav>
 
           {/* Mobile action buttons */}
-          <div className="flex items-center gap-2 md:hidden relative z-10">
+          <div className="flex items-center gap-1.5 sm:gap-2 md:hidden relative z-10 flex-shrink-0">
             <button
               onClick={toggleTheme}
-              className="p-2.5 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+              className="p-2 sm:p-2.5 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
               aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
             >
               {theme === "dark"
@@ -143,14 +144,14 @@ export default function Navbar() {
             </button>
             <button
               onClick={toggleTerminal}
-              className="p-2.5 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+              className="p-2 sm:p-2.5 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
               aria-label="Terminal (Ctrl + `)"
             >
               <Terminal className="w-4 h-4" aria-hidden="true" />
             </button>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2.5 rounded-full bg-zinc-900 dark:bg-zinc-100 text-zinc-50 dark:text-zinc-900 hover:scale-105 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+              className="p-2 sm:p-2.5 rounded-full bg-zinc-900 dark:bg-zinc-100 text-zinc-50 dark:text-zinc-900 hover:scale-105 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
               aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"

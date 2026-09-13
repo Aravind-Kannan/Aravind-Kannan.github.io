@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "../tokens.css";
 @custom-variant dark (&:is(.dark *));
 
 @theme {
@@ -54,7 +55,12 @@
     --dot-color: rgba(255, 255, 255, 0.028);
   }
 
+  html {
+    overflow-x: clip;
+  }
+
   body {
+    overflow-x: clip;
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -155,6 +161,19 @@
 .dark .orb-1 { background: radial-gradient(circle, rgba(59, 130, 246, 0.12), transparent 70%); }
 .dark .orb-2 { background: radial-gradient(circle, rgba(6, 182, 212, 0.08), transparent 70%); }
 .dark .orb-3 { background: radial-gradient(circle, rgba(59, 130, 246, 0.06), transparent 70%); }
+
+@media (max-width: 640px) {
+  .orb-1 { width: 280px; height: 280px; filter: blur(60px); }
+  .orb-2 { width: 240px; height: 240px; filter: blur(60px); }
+  .orb-3 { width: 200px; height: 200px; filter: blur(60px); }
+}
+
+/* Fixed background attachment is expensive / broken on many mobile browsers */
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll;
+  }
+}
 
 /* ─── Custom cursor — only on fine-pointer devices ─ */
 .custom-cursor-dot,

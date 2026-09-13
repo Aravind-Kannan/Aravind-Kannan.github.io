@@ -26,7 +26,7 @@ export default function MainLayout() {
   const showNavFooter = !isBooting || location.pathname !== "/";
 
   return (
-    <div className="min-h-screen flex flex-col font-sans selection:bg-primary-500/30 overflow-x-hidden">
+    <div className="min-h-screen flex flex-col font-sans selection:bg-primary-500/30 overflow-x-clip">
       {/* Skip to main content */}
       <a
         href="#main-content"
@@ -70,7 +70,7 @@ export default function MainLayout() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8, transition: { duration: 0.2 } }}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="flex-grow flex flex-col w-full"
+            className="flex-grow flex flex-col w-full min-w-0"
           >
             <FrozenOutlet />
           </motion.div>

@@ -1,6 +1,7 @@
 import { personalInfo } from "../data/info";
 import { projects } from "../data/projects";
 import { journey } from "../data/journey";
+import { getBootPreference, setBootPreference } from "./bootPreference";
 
 export interface TerminalState {
   cwd: string;
@@ -13,6 +14,8 @@ export type CommandResult = {
   newCwd?: string;
   clear?: boolean;
   exit?: boolean;
+  /** Trigger landing deploy/boot sequence easter egg */
+  boot?: boolean;
 };
 
 const resolvePath = (pwd: string, target: string): string | null => {
@@ -59,6 +62,7 @@ export const executeCommand = (cmdStr: string, state: TerminalState): CommandRes
   <div class="text-primary-500">projects</div><div>List featured projects</div>
   <div class="text-primary-500">journey</div><div>List timeline milestones</div>
   <div class="text-primary-500">contact</div><div>Get contact information</div>
+  <div class="text-primary-500">boot [on|off]</div><div>Deploy sequence easter egg</div>
   <div class="text-primary-500">clear</div><div>Clear the terminal screen</div>
   <div class="text-primary-500">exit</div><div>Return to website GUI</div>
 </div>`,
@@ -160,6 +164,31 @@ export const executeCommand = (cmdStr: string, state: TerminalState): CommandRes
       });
       out += `</div>`;
       return { output: out, isHtml: true };
+    }
+
+    case "boot": {
+      const sub = (args[1] || "").toLowerCase();
+      if (sub === "on" || sub === "always") {
+        setBootPreference("always");
+        return {
+          output:
+            "Boot sequence ON (saved in this browser).\nVisits to / will play deploy animation.\nTurn off: boot off\nPlay now: boot",
+        };
+      }
+      if (sub === "off") {
+        setBootPreference("off");
+        return { output: "Boot sequence OFF. Landing shows hero immediately." };
+      }
+      if (sub === "status") {
+        return {
+          output: `boot preference: ${getBootPreference()}\ntip: ?boot in URL plays once · ?boot=always persists`,
+        };
+      }
+      return {
+        output: "Starting deploy sequence...",
+        boot: true,
+        exit: true,
+      };
     }
 
     case "sudo":

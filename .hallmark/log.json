@@ -1,0 +1,17 @@
+[
+  {
+    "date": "2026-09-13",
+    "scope": "app",
+    "macrostructure": "Letter",
+    "theme": "site-system",
+    "enrichment": "none",
+    "brief": "Align Journey/Projects/About/Contact to Letter chrome via design.md"
+  },
+  {
+    "date": "2026-09-13",
+    "macrostructure": "Letter",
+    "theme": "site-system",
+    "enrichment": "none",
+    "brief": "Contact page without form — personal letter + channels"
+  }
+]
