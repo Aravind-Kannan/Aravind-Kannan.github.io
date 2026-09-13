@@ -85,7 +85,7 @@ export default function Contact() {
                 href={personalInfo.socials.email}
                 className="group block focus-visible:outline-none"
               >
-                <span className="block font-mono text-base sm:text-lg text-zinc-900 dark:text-zinc-100 break-all group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200">
+                <span className="block font-mono text-sm sm:text-base text-zinc-900 dark:text-zinc-100 whitespace-nowrap group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200">
                   {email}
                 </span>
                 <span className="mt-2 inline-flex items-center gap-1 text-sm text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-700 dark:group-hover:text-zinc-300 transition-colors">
