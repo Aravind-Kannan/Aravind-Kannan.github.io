@@ -2,18 +2,6 @@ import { motion } from "framer-motion";
 import { personalInfo } from "../data/info";
 import Reveal from "../components/Reveal";
 
-const principles = [
-  "Automation over repetition",
-  "Simplicity over complexity",
-  "Observability is not optional",
-  "Documentation is code",
-];
-
-const toolkit = [
-  "Kubernetes", "Rust", "Go", "Distributed Systems",
-  "Platform Engineering", "AWS", "Terraform", "Docker",
-];
-
 export default function About() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-20 w-full flex-grow relative">
@@ -55,7 +43,7 @@ export default function About() {
                 Principles
               </h2>
               <ul className="space-y-3 text-zinc-600 dark:text-zinc-400 font-light relative z-10">
-                {principles.map((p, i) => (
+                {personalInfo.principles.map((p, i) => (
                   <motion.li
                     key={p}
                     initial={{ opacity: 0, x: -10 }}
@@ -86,7 +74,7 @@ export default function About() {
                 Toolkit
               </h2>
               <div className="flex flex-wrap gap-2 sm:gap-2.5 relative z-10" role="list" aria-label="Skills and technologies">
-                {toolkit.map((item, i) => (
+                {personalInfo.toolkit.map((item, i) => (
                   <motion.span
                     key={item}
                     role="listitem"

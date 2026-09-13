@@ -123,7 +123,7 @@ export const executeCommand = (cmdStr: string, state: TerminalState): CommandRes
           return { output: `Email:   ${personalInfo.socials.email.replace("mailto:", "")}\nGitHub:  ${personalInfo.socials.github}\nLinkedIn:${personalInfo.socials.linkedin}` };
         }
         if (targetFile === "skills.txt") {
-          return { output: "Kubernetes, Rust, Go, Distributed Systems, Docker, Terraform" };
+          return { output: personalInfo.toolkit.join(", ") };
         }
       } else if (targetDir === "~/projects") {
         const proj = projects.find(p => `${p.id}.md` === targetFile);
@@ -136,7 +136,7 @@ export const executeCommand = (cmdStr: string, state: TerminalState): CommandRes
         const j = journey.find(j => `${j.id}.md` === targetFile);
         if (j) {
           return {
-            output: `\n[${j.date}] ${j.title}\n${j.description}`,
+            output: `\n[${j.date}] ${j.role}${j.org ? ` — ${j.org}` : ""}\n${j.description}`,
           };
         }
       }
@@ -156,7 +156,7 @@ export const executeCommand = (cmdStr: string, state: TerminalState): CommandRes
     case "journey": {
       let out = `<div class="mt-2 space-y-3">`;
       journey.forEach(j => {
-        out += `<div class="flex gap-4"><span class="text-primary-400 w-24 shrink-0">${j.date}</span><span>${j.title}</span></div>`;
+        out += `<div class="flex gap-4"><span class="text-primary-400 w-24 shrink-0">${j.date}</span><span>${j.role}${j.org ? ` — ${j.org}` : ""}</span></div>`;
       });
       out += `</div>`;
       return { output: out, isHtml: true };

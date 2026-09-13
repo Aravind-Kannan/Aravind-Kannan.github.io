@@ -77,5 +77,3 @@ export const projects: Project[] = [
       "Flower + FedAvg for federated training; Ganache/Remix/Ethereum (Sepolia) smart contracts (Model, HashStorageLocal/Global, FederatedLearning); H5 models with IPFS hashes for integrity tracking.",
   },
 ];
-
-export const projectCategories = ["All", "AI", "Distributed", "Research"];
