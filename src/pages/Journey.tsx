@@ -14,7 +14,8 @@ export default function Journey() {
             My Journey
           </h1>
           <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed font-light">
-            A timeline of my career, learning, and fundamental milestones.
+            Backend and product engineering → integrations and workflows → infrastructure
+            and platforms → developer tooling → distributed data processing at Zuora.
           </p>
         </header>
 

@@ -66,8 +66,8 @@ export default function Projects() {
               Projects
             </h1>
             <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed font-light max-w-2xl">
-              A selection of my recent work, side projects, and open source contributions.
-              Building scalable solutions with modern infrastructure.
+              Independent builds that complement day-job work — AI systems, distributed
+              architectures, and research — beyond the Kubernetes and platform stack.
             </p>
           </Reveal>
         </header>
