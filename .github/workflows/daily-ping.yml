@@ -1,0 +1,23 @@
+name: Daily render ping for Empulse BE and DB
+
+on:
+  workflow_dispatch:
+
+jobs:
+  curl-website:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run cURL for BE
+        run: curl -I https://empulse-82dt.onrender.com
+
+      - name: Run PSQL Command for DB
+        env:
+          PGPASSWORD: ${{ secrets.DB_PASSWORD }} 
+        run: |
+          psql -h ${{ secrets.DB_HOST }} \
+               -p ${{ secrets.DB_PORT }} \
+               -U ${{ secrets.DB_USER }} \
+               -d ${{ secrets.DB_NAME }} \
+               -c "SELECT 1;"
+               
